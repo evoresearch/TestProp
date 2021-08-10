@@ -57,6 +57,7 @@ public class CloneVisitor extends ASTVisitor {
 
     public CloneVisitor(Clone clone, CompilationUnit cu, String path){
         this.clone = clone;
+        setProjectPath(clone.getProjectPath());
         this.cu = cu;
         this.path = path;
         defs = new HashSet<Token>();
@@ -229,10 +230,8 @@ public class CloneVisitor extends ASTVisitor {
 
             // get thrown exceptions
             ArrayList<String> excps = new ArrayList<String>();
-            for(Object obj: node.thrownExceptions()){
-                if(obj instanceof Name){
-                    excps.add(((Name)obj).toString());
-                }
+            for(Object obj: node.thrownExceptionTypes()){
+                excps.add(obj.toString());
             }
             clone.setExceptions(excps);
 

@@ -3,6 +3,7 @@ package se.gu.model;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import se.gu.utils.FileUtiltities;
 import se.gu.utils.JParser;
 
 import java.io.File;
@@ -26,6 +27,16 @@ public class Clone {
     String path;
     String test;
     boolean isStatic = false;
+
+    public String getProjectPath() {
+        return projectPath;
+    }
+
+    public void setProjectPath(String projectPath) {
+        this.projectPath = projectPath;
+    }
+
+    private String projectPath;
 
     public Clone(String clazz, String method, String code){
         this.owner = clazz;
@@ -65,7 +76,7 @@ public class Clone {
         this.method = m;
         this.x = x;
         this.y = y;
-        this.owner = FilenameUtils.getName(path).replace(FilenameUtils.getExtension(path),"").trim();// path.substring(path.lastIndexOf('/') + 1).replace(".java", "");
+        this.owner = FilenameUtils.getName(path).replace("."+FilenameUtils.getExtension(path),"").trim();// path.substring(path.lastIndexOf('/') + 1).replace(".java", "");
         this.code = read(path, x, y);
         this.start = getLineNumber(path, x);
         this.end = getLineNumber(path, y);
@@ -73,7 +84,7 @@ public class Clone {
 
     private String read(String path, int x, int y) throws IOException{
        // CloneParser cp = new CloneParser();
-        String code = FileUtils.readFileToString(new File(path)); //cp.readFileToString(path);
+        String code = FileUtiltities.readFileToString(path); //cp.readFileToString(path);
         return code.substring(x,y);
     }
 
