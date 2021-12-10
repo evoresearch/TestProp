@@ -15,7 +15,7 @@ import java.util.LinkedList;
 public class DUAnalyzer {
     Clone clone;
     String path;//file path
-
+String projectPath;//project path for this file
     public HashSet<Token> prestate; // program state for the test level, including alive variables at the beginning of the clone
     public HashSet<Token> poststate; // program state for the test level, including alive variables at the end of the clone
     public HashSet<Token> allstate;// program state for the state level, including variables that are alive at any program point in the clone
@@ -49,7 +49,17 @@ public class DUAnalyzer {
         this.pre = new HashMap<String, HashSet<Token>>();
         this.post = new HashMap<String, HashSet<Token>>();
     }
-
+    public DUAnalyzer(String projectPath, Clone c){
+        this.clone = c;
+        this.path = c.getPath();
+        this.projectPath = projectPath;
+        this.prestate = new HashSet<Token>();
+        this.poststate = new HashSet<Token>();
+        this.allstate = new HashSet<Token>();
+        this.all = new HashMap<String, HashSet<Token>>();
+        this.pre = new HashMap<String, HashSet<Token>>();
+        this.post = new HashMap<String, HashSet<Token>>();
+    }
 
     public void analyze() throws IOException {
         HashSet<Token> uses = new HashSet<Token>();

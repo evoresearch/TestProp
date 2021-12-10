@@ -72,11 +72,11 @@ public class ApplicabilityAnalyzer {
         return post_unmatch_clone;
     }
 
-    public ApplicabilityAnalyzer(String sourcePath, int sourceStart, int sourceEnd, String targetPath, int targetStart, int targetEnd,String sourceProjectPath,String targetProjectPath) throws IOException {
+    public ApplicabilityAnalyzer(String sourcePath, int sourceStart, int sourceEnd, String targetPath, int targetStart, int targetEnd) throws IOException {
         sourceCode = FileUtils.readFileToString(new File((sourcePath)));
         targetCode = FileUtils.readFileToString(new File(targetPath));
-        this.sourceProjectPath = sourceProjectPath;
-        this.targetProjectPath = targetProjectPath;
+//        this.sourceProjectPath = sourceProjectPath;
+//        this.targetProjectPath = targetProjectPath;
 
         CompilationUnit cu1 = JParser.parseCode(sourceCode);
         CloneCalibrator calib1 = new CloneCalibrator(cu1, sourceStart, sourceEnd);
@@ -99,12 +99,13 @@ public class ApplicabilityAnalyzer {
         int x1 = FileUtiltities.getStartIndex(sourceCode, calib1.first);
         int y1 = FileUtiltities.getEndIndex(sourceCode, calib1.last);
         sourceClone = new Clone(sourcePath,sourceMethod,x1,y1);
-        sourceClone.setProjectPath(sourceProjectPath);
+
+        //sourceClone.setProjectPath(sourceProjectPath);
 
         int x2 = FileUtiltities.getStartIndex(sourceCode, calib2.first);
         int y2 = FileUtiltities.getEndIndex(sourceCode, calib2.last);
         targetClone = new Clone(targetPath,targetMethod,x2,y2);
-        targetClone.setProjectPath(targetProjectPath);
+        //targetClone.setProjectPath(targetProjectPath);
 
         init();
 

@@ -35,5 +35,53 @@ public class Configuration {
     }
 
     private int maxThreads;
+
+    public String getExecution() {
+        return execution;
+    }
+
+    public void setExecution(String execution) {
+        this.execution = execution;
+    }
+
+    private String execution;
+
+    public String getuUTPairsFile() {
+        return uUTPairsFile;
+    }
+
+    public void setuUTPairsFile(String uUTPairsFile) {
+        this.uUTPairsFile = uUTPairsFile;
+    }
+
+    private String uUTPairsFile;
+
+    public int getIndexOfSourceFile() {
+        return indexOfSourceFile;
+    }
+
+    public void setIndexOfSourceFile(String indexOfSourceFile) {
+        this.indexOfSourceFile = Integer.parseInt(indexOfSourceFile);
+    }
+
+    public int getIndexOfTargetUUTFile() {
+        return indexOfTargetUUTFile;
+    }
+
+    public void setIndexOfTargetUUTFile(String indexOfTargetUUTFile) {
+        this.indexOfTargetUUTFile = Integer.parseInt(indexOfTargetUUTFile);
+    }
+
+    private int indexOfSourceFile,indexOfTargetUUTFile;
+
+    public String getuUTPairsFinalFileWithEditScripts() {
+        return uUTPairsFinalFileWithEditScripts;
+    }
+
+    public void setuUTPairsFinalFileWithEditScripts(String uUTPairsFinalFileWithEditScripts) {
+        this.uUTPairsFinalFileWithEditScripts = uUTPairsFinalFileWithEditScripts;
+    }
+
+    private String uUTPairsFinalFileWithEditScripts;
 }
 

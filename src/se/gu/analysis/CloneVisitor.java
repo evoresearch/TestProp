@@ -45,7 +45,7 @@ public class CloneVisitor extends ASTVisitor {
         this.projectPath = projectPath;
     }
 
-    private String projectPath;
+    public String projectPath;
 
     public int methodStart = 0; // the line number of the last field declaration
     public boolean isMethodEnd = false;
@@ -57,7 +57,14 @@ public class CloneVisitor extends ASTVisitor {
 
     public CloneVisitor(Clone clone, CompilationUnit cu, String path){
         this.clone = clone;
-        setProjectPath(clone.getProjectPath());
+        String[]items = path.replace("\\","/").split("/");
+
+        this.projectPath = String.format("%s/%s/%s/%s/%s",items[0],//C:
+                items[1],//grouped
+                items[2],//n_username e.g., 16_google
+                items[3],//username e.g., google
+                items[4]//projectname e.g., bundletool
+        );
         this.cu = cu;
         this.path = path;
         defs = new HashSet<Token>();
@@ -93,7 +100,7 @@ public class CloneVisitor extends ASTVisitor {
                 String fn = st.getName().getFullyQualifiedName();
                 String[] ss = fn.split("\\.");
                 String name = ss[ss.length - 1];
-                File file = FileUtiltities.findFile(name + ".java",getProjectPath());
+                File file = FileUtiltities.findFile(name + ".java",projectPath);
                 if(file != null){
 
                     try {
