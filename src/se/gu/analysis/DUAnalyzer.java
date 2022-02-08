@@ -75,7 +75,8 @@ String projectPath;//project path for this file
         uses.addAll(cv.wilds);
         alive.addAll(cv.uses);
         alive.addAll(cv.defs);
-        alive.removeAll(cv.vars2);
+        alive.removeAll(cv.vars2); // TODO: (I think) this is not required in our case. It should be sufficient to only utilize cv.uses (in case it correctly does what it sounds like)
+                                   // TODO: However, one could probably differentiate between parameters, attributes and local variables and additionally take into account return type
 
         this.pre.put("clone", new HashSet<Token>(uses));
         this.post.put("clone", new HashSet<Token>(alive));

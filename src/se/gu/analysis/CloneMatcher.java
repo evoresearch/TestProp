@@ -44,7 +44,7 @@ public class CloneMatcher {
 
         // If there is still unmatched tokens, throws exception to ensure type safety
         if(!unmatches2.isEmpty()){
-            System.out.println("some variables unmatched");
+            //System.out.println("some variables unmatched");
             return false;
         }
 
@@ -112,7 +112,7 @@ public class CloneMatcher {
 
         if(map.keySet().size() != s2.size()){
             //if(GrafterConfig.verbose){
-                System.out.println("Failed to match all clone2 tokens to clone1 tokens with the same path.");
+                //System.out.println("Failed to match all clone2 tokens to clone1 tokens with the same path.");
             //}
         }
 
