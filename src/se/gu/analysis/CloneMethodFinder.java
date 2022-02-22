@@ -32,14 +32,20 @@ public class CloneMethodFinder extends ASTVisitor {
         if(nodeStart<=codeStart&&(nodeEnd>=codeEnd||Math.abs(nodeEnd-codeEnd)<=3)){
             setMethodName(node.getName().toString());
 
-            String owner = getOwner((TypeDeclaration) node.getParent() );
+            String owner = getOwner( node.getParent() );
 
             setOwnerName(owner);
         }
         return false;
     }
-private String getOwner(TypeDeclaration node){
-        return node.getName().toString();
+private String getOwner(ASTNode node){
+        String owner = null;
+        if(node instanceof EnumDeclaration){
+            owner = ((EnumDeclaration)node).getName().toString();
+        }else{
+            owner = ((TypeDeclaration)node).getName().toString();
+        }
+        return owner;
 }
     public String getOwnerName() {
         return ownerName;
