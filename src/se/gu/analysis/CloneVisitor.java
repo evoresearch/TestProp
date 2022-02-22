@@ -566,7 +566,7 @@ public class CloneVisitor extends ASTVisitor {
         Token t = new Token(type, Label.LOCAL, name);
         int line = getLineNumber(node);
         t.start = line;
-        t.end = blockStacks.peek().getRight() - 1;
+        t.end = blockStacks.isEmpty()?t.start:blockStacks.peek().getRight() - 1;
         defs.add(t);
         vars.add(t);
 
@@ -618,7 +618,8 @@ public class CloneVisitor extends ASTVisitor {
             Token t = new Token(type, Label.LOCAL, name, isFinal, isPrivate, isInit);
             int line = getLineNumber(node);
             t.start = line;
-            t.end = blockStacks.peek().getRight() - 1;
+            //MUKE:Fix empty stack ecdption
+            t.end = blockStacks.isEmpty()?t.start: blockStacks.peek().getRight() - 1;
             vars.add(t);
 
             if((clone.getX() <= start ) && (end <= clone.getY())){
@@ -671,7 +672,7 @@ public class CloneVisitor extends ASTVisitor {
             Token t = new Token(type, Label.LOCAL, name, isFinal, isPrivate, isInit);
             int line = getLineNumber(node);
             t.start = line;
-            t.end = blockStacks.peek().getRight() - 1;
+            t.end = blockStacks.isEmpty()?t.start:blockStacks.peek().getRight() - 1;
             vars.add(t);
 
             if((clone.getX() <= start ) && (end <= clone.getY())){
