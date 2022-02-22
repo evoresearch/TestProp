@@ -81,7 +81,16 @@ public class Clone {
         this.start = getLineNumber(path, x);
         this.end = getLineNumber(path, y);
     }
-
+    public Clone(String ownerName, String path, String m, int x, int y) throws IOException {
+        this.path = path;
+        this.method = m;
+        this.x = x;
+        this.y = y;
+        this.owner = ownerName; //FilenameUtils.getName(path).replace("."+FilenameUtils.getExtension(path),"").trim();// path.substring(path.lastIndexOf('/') + 1).replace(".java", "");
+        this.code = read(path, x, y);
+        this.start = getLineNumber(path, x);
+        this.end = getLineNumber(path, y);
+    }
     private String read(String path, int x, int y) throws IOException{
        // CloneParser cp = new CloneParser();
         String code = FileUtiltities.readFileToString(path); //cp.readFileToString(path);

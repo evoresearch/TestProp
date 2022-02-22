@@ -165,18 +165,31 @@ public class CloneCalibrator extends ASTVisitor {
         return false;
     }
 
-//	@Override
-//	public boolean visit(SuperConstructorInvocation node){
-//		int start = getStartLineNumber(node);
-//		int end = getEndLineNumber(node);
-//
-//		if(this.start <= start && end <= this.end){
-//			if(start < this.first)	this.first = start;
-//			if(end > this.last) this.last = end;
-//		}
-//
-//		return false;
-//	}
+	@Override
+	public boolean visit(SuperConstructorInvocation node){
+		int start = getStartLineNumber(node);
+		int end = getEndLineNumber(node);
+
+		if(this.start <= start && end <= this.end){
+			if(start < this.first)	this.first = start;
+			if(end > this.last) this.last = end;
+		}
+
+		return false;
+	}
+
+    @Override
+    public boolean visit(ThrowStatement node){
+        int start = getStartLineNumber(node);
+        int end = getEndLineNumber(node);
+
+        if(this.start <= start && end <= this.end){
+            if(start < this.first)	this.first = start;
+            if(end > this.last) this.last = end;
+        }
+
+        return false;
+    }
 
     @Override
     public boolean visit(SynchronizedStatement node){

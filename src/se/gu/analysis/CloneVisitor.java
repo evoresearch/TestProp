@@ -201,7 +201,8 @@ public class CloneVisitor extends ASTVisitor {
         method_decls.put(m, node);
 
         // only analyze the method that contains code clones, also need to check the location of method since there might be overwritten methods
-        if(name.equals(clone.getMethod()) && node.getStartPosition() <= clone.getX() && node.getStartPosition() + node.getLength() >= clone.getY()){
+        //if(name.equals(clone.getMethod()) && node.getStartPosition() <= clone.getX() && node.getStartPosition() + node.getLength() >= clone.getY()){
+        if(name.equals(clone.getMethod())){
             int start = cu.getLineNumber(node.getStartPosition());
             int end = cu.getLineNumber(node.getStartPosition() + node.getLength());
 
@@ -771,8 +772,8 @@ public class CloneVisitor extends ASTVisitor {
         int end = node.getLength() + start;
         String name = node.getIdentifier();
         int line = getLineNumber(node);
-
-        if((clone.getX() <= start ) && (end <= clone.getY())){
+//if((clone.getX() <= start ) && (end <= clone.getY())){
+        if((end <= clone.getY())){
             Token t = overshadow(name);
             if(t != null){
                 if(isAssignmentLeftHand){

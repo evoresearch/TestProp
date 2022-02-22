@@ -9,12 +9,12 @@ public class FileUtiltities {
 
     public static String readFileToString(String filePath) throws IOException {
         File file = new File(filePath);
-        StringBuilder fileContents = new StringBuilder((int)file.length());
+        StringBuilder fileContents = new StringBuilder((int) file.length());
         Scanner scanner = new Scanner(file);
         String lineSeparator = System.getProperty("line.separator");
 
         try {
-            while(scanner.hasNextLine()) {
+            while (scanner.hasNextLine()) {
                 fileContents.append(scanner.nextLine() + lineSeparator);
             }
             return fileContents.toString();
@@ -23,19 +23,19 @@ public class FileUtiltities {
         }
     }
 
-    public static String[] readFileToArray(String filePath) throws IOException{
+    public static String[] readFileToArray(String filePath) throws IOException {
         String content = readFileToString(filePath);
         return content.split(System.lineSeparator());
     }
 
-    public static ArrayList<File> match(String pattern, File dir){
+    public static ArrayList<File> match(String pattern, File dir) {
         ArrayList<File> matches = new ArrayList<File>();
         File[] files = dir.listFiles();
-        if(files != null){
-            for(File f : files){
-                if(f.isDirectory()){
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) {
                     matches.addAll(match(pattern, f));
-                }else if(f.getName().matches(pattern)){
+                } else if (f.getName().matches(pattern)) {
                     matches.add(f);
                 }
             }
@@ -46,24 +46,25 @@ public class FileUtiltities {
 
     /**
      * Fine the file in the src directory based on the given file name
+     *
      * @param name
      * @return
      */
-    public static File findFile(String name,String projectPath){
+    public static File findFile(String name, String projectPath) {
         File dir = new File(projectPath);
         return findFileHelper(name, dir);
     }
 
-    public static File findFileHelper(String name, File dir){
+    public static File findFileHelper(String name, File dir) {
         File result = null;
         File[] files = dir.listFiles();
-        if(files != null){
-            for(File f : files){
-                if(f.getName().equalsIgnoreCase(name)){
+        if (files != null) {
+            for (File f : files) {
+                if (f.getName().equalsIgnoreCase(name)) {
                     return f;
-                }else if(f.isDirectory()){
+                } else if (f.isDirectory()) {
                     result = findFileHelper(name, f);
-                    if(result != null){
+                    if (result != null) {
                         return result;
                     }
                 }
@@ -73,7 +74,7 @@ public class FileUtiltities {
         return result;
     }
 
-    public static void writeStringtoFile(String content, String path) throws IOException{
+    public static void writeStringtoFile(String content, String path) throws IOException {
         File log = new File(path);
         FileWriter w = new FileWriter(log, false);
         BufferedWriter writer = new BufferedWriter(w);
@@ -84,11 +85,11 @@ public class FileUtiltities {
 
     public static void writeStringArraytoFile(String[] lines, String path) throws IOException {
         String s = "";
-        for(int i = 0; i < lines.length; i++){
+        for (int i = 0; i < lines.length; i++) {
             String line = lines[i];
-            if(i == lines.length - 1) {
+            if (i == lines.length - 1) {
                 s += line;
-            }else{
+            } else {
                 s += line + System.lineSeparator();
             }
         }
@@ -97,22 +98,23 @@ public class FileUtiltities {
 
     /**
      * insert the content to a specific line
+     *
      * @param content
      * @param line
      * @param path
      * @throws IOException
      */
-    public static void writeStringtoFile(String content, int line, String path) throws IOException{
+    public static void writeStringtoFile(String content, int line, String path) throws IOException {
         String[] ss = readFileToArray(path);
         ArrayList<String> contents = new ArrayList<String>();
-        for(String s : ss){
+        for (String s : ss) {
             contents.add(s);
         }
 
         contents.add(line - 1, content);
 
         String text = "";
-        for(int i = 0; i < contents.size() - 1; i ++){
+        for (int i = 0; i < contents.size() - 1; i++) {
             text += contents.get(i) + System.lineSeparator();
         }
         text += contents.get(contents.size() - 1);
@@ -120,17 +122,17 @@ public class FileUtiltities {
         writeStringtoFile(text, path);
     }
 
-    public static void rewriteStringToFile(String content, int line, String path) throws IOException{
+    public static void rewriteStringToFile(String content, int line, String path) throws IOException {
         String[] ss = readFileToArray(path);
         ArrayList<String> contents = new ArrayList<String>();
-        for(String s : ss){
+        for (String s : ss) {
             contents.add(s);
         }
 
         contents.set(line - 1, content);
 
         String text = "";
-        for(int i = 0; i < contents.size() - 1; i ++){
+        for (int i = 0; i < contents.size() - 1; i++) {
             text += contents.get(i) + System.lineSeparator();
         }
         text += contents.get(contents.size() - 1);
@@ -138,30 +140,40 @@ public class FileUtiltities {
         writeStringtoFile(text, path);
     }
 
-    public static int getStartIndex(String s, int line){
-        String lineSeparator = System.getProperty("line.separator");
+    public static int getStartIndex(String s, int line) {
+        String lineSeparator = System.lineSeparator();
         String[] lines = s.split(lineSeparator);
+        //lines may be <=1 if lineSeerator = "\r\n", so try only using \n
+        if (lines.length <= 1) {
+            lineSeparator = "\\n";
+            lines = s.split(lineSeparator);
+        }
 
         int index = 0;
         // line number starts from 1
-        for(int i = 1; i < line; i ++){
+        for (int i = 1; i < line; i++) {
 
-            index += lines[i-1].length() + lineSeparator.length();
+            index += lines[i - 1].length() + lineSeparator.length();
         }
 
         return index;
     }
 
-    public static int getEndIndex(String s, int line){
-        String[] lines = s.split(System.lineSeparator());
-
+    public static int getEndIndex(String s, int line) {
+        String lineSeparator = System.lineSeparator();
+        String[] lines = s.split(lineSeparator);
+//lines may be <=1 if lineSeerator = "\r\n", so try only using \n
+        if (lines.length <= 1) {
+            lineSeparator = "\\n";
+            lines = s.split(lineSeparator);
+        }
         int index = 0;
         // line number starts from 1
-        for(int i = 1; i < line + 1; i ++){
-            index += lines[i-1].length() + System.lineSeparator().length();
+        for (int i = 1; i < line + 1; i++) {
+            index += lines[i - 1].length() + lineSeparator.length();
         }
 
-        return index - System.lineSeparator().length();
+        return index - lineSeparator.length();
     }
 
     public static int grepLineNumber(String file, String text) throws IOException {
@@ -170,10 +182,10 @@ public class FileUtiltities {
 
         try {
             String line = rdr.readLine();
-            while(line != null){
+            while (line != null) {
                 if (line.indexOf(text) >= 0) {
                     return rdr.getLineNumber();
-                }else{
+                } else {
                     line = rdr.readLine();
                 }
             }
@@ -192,7 +204,7 @@ public class FileUtiltities {
 
         try {
             String line = rdr.readLine();
-            while(line != null){
+            while (line != null) {
                 if (line.indexOf(text) >= 0 && !line.contains("ucla.cs.")) {
                     results += line + "\n";
                 }
@@ -207,19 +219,19 @@ public class FileUtiltities {
         return results;
     }
 
-    public static String grepLine(String file, int n) throws IOException{
+    public static String grepLine(String file, int n) throws IOException {
         File f = new File(file);
         LineNumberReader rdr = new LineNumberReader(new FileReader(f));
 
         try {
             int i = 1;
             String line = rdr.readLine();
-            while(line != null){
+            while (line != null) {
                 if (i == n) {
                     return line;
-                }else{
+                } else {
                     line = rdr.readLine();
-                    i ++;
+                    i++;
                 }
             }
 
@@ -230,21 +242,21 @@ public class FileUtiltities {
         return "";
     }
 
-    public static void match_delete(String pattern,String projectPath){
+    public static void match_delete(String pattern, String projectPath) {
         ArrayList<File> matches = match(pattern, new File(projectPath));
-        for(File f : matches){
+        for (File f : matches) {
             f.delete();
         }
     }
 
-    public static boolean delete(String path){
+    public static boolean delete(String path) {
         File f = new File(path);
-        if(!f.exists()) return true;
+        if (!f.exists()) return true;
 
-        if(f.isDirectory()){
+        if (f.isDirectory()) {
             File[] files = f.listFiles();
-            if(files != null){
-                for(File file : files){
+            if (files != null) {
+                for (File file : files) {
                     delete(file.getAbsolutePath());
                 }
             }
@@ -254,14 +266,14 @@ public class FileUtiltities {
     }
 
 
-    public static boolean emptyDir(String path){
+    public static boolean emptyDir(String path) {
         File dir = new File(path);
-        if(!dir.exists()) return false;
+        if (!dir.exists()) return false;
 
-        if(dir.isDirectory()){
+        if (dir.isDirectory()) {
             File[] files = dir.listFiles();
-            if(files != null){
-                for(File file : files){
+            if (files != null) {
+                for (File file : files) {
                     delete(file.getAbsolutePath());
                 }
             }
@@ -270,14 +282,14 @@ public class FileUtiltities {
         return true;
     }
 
-    public static HashSet<File> findFilesWithExtension(String extension, File dir){
+    public static HashSet<File> findFilesWithExtension(String extension, File dir) {
         HashSet<File> bakFiles = new HashSet<File>();
-        if(dir.isDirectory()){
+        if (dir.isDirectory()) {
             File[] files = dir.listFiles();
-            for(File file : files){
-                if(file.isFile() && file.getName().endsWith(extension)){
+            for (File file : files) {
+                if (file.isFile() && file.getName().endsWith(extension)) {
                     bakFiles.add(file);
-                }else if(file.isDirectory()){
+                } else if (file.isDirectory()) {
                     HashSet<File> bakFiles2 = findFilesWithExtension(extension, file);
                     bakFiles.addAll(bakFiles2);
                 }

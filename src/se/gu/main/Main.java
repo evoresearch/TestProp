@@ -37,6 +37,14 @@ public class Main {
         }
     }
 
+    /**
+     * Cleans data files, e.g., by removing duplicates
+     * @param configuration
+     */
+    private static void cleanData(Configuration configuration){
+        File resultsFile = new File(String.format("%s/testcaseTargetUUTPairMatching.csv", configuration.getAnalysisDirectory()));//here we want to use the
+        File finalResultsFile = new File(String.format("%s/testcaseTargetUUTPairMatchingFINAL.csv", configuration.getAnalysisDirectory()));
+    }
     private static void extractVariations(Configuration configuration) {
         PrintWriter writer = null;
         PrintWriter finalWriter = null;

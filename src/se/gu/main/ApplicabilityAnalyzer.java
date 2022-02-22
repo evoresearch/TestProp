@@ -90,21 +90,26 @@ public class ApplicabilityAnalyzer {
         CloneMethodFinder sourceMethodFinder = new CloneMethodFinder(cu1, sourceStart, sourceEnd);
         cu1.accept(sourceMethodFinder);
         String sourceMethod = sourceMethodFinder.getMethodName();
+        //added ability to get owner
+        String sourceOwner = sourceMethodFinder.getOwnerName();
 
         CloneMethodFinder targetMethodFinder = new CloneMethodFinder(cu2, targetStart, targetEnd);
         cu2.accept(targetMethodFinder);
         String targetMethod = targetMethodFinder.getMethodName();
+        String targetOwner = targetMethodFinder.getOwnerName();
 
         // create two refined clones with only graftable code
         int x1 = FileUtiltities.getStartIndex(sourceCode, calib1.first);
         int y1 = FileUtiltities.getEndIndex(sourceCode, calib1.last);
-        sourceClone = new Clone(sourcePath,sourceMethod,x1,y1);
+        //sourceClone = new Clone(sourcePath,sourceMethod,x1,y1);
+        sourceClone = new Clone(sourceOwner, sourcePath,sourceMethod,x1,y1);
 
         //sourceClone.setProjectPath(sourceProjectPath);
 
-        int x2 = FileUtiltities.getStartIndex(sourceCode, calib2.first);
-        int y2 = FileUtiltities.getEndIndex(sourceCode, calib2.last);
-        targetClone = new Clone(targetPath,targetMethod,x2,y2);
+        int x2 = FileUtiltities.getStartIndex(targetCode, calib2.first);
+        int y2 = FileUtiltities.getEndIndex(targetCode, calib2.last);
+        //targetClone = new Clone(targetPath,targetMethod,x2,y2);
+        targetClone = new Clone(targetOwner, targetPath,targetMethod,x2,y2);
         //targetClone.setProjectPath(targetProjectPath);
 
         init();
