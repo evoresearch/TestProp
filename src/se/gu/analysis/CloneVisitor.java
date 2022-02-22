@@ -263,8 +263,10 @@ public class CloneVisitor extends ASTVisitor {
             }
             clone.setParameters(params);
 
-            node.getBody().accept(this);
-
+            //fix cases where body is null
+            if(node.getBody()!=null) {
+                node.getBody().accept(this);
+            }
             blockStacks.pop();
         }
 
