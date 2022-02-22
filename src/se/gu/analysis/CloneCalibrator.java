@@ -179,6 +179,7 @@ public class CloneCalibrator extends ASTVisitor {
 	}
 
     @Override
+
     public boolean visit(ThrowStatement node){
         int start = getStartLineNumber(node);
         int end = getEndLineNumber(node);
@@ -190,6 +191,7 @@ public class CloneCalibrator extends ASTVisitor {
 
         return false;
     }
+
 
     @Override
     public boolean visit(SynchronizedStatement node){

@@ -48,6 +48,7 @@ public class VariationExtractor implements Runnable {
             int targetMethodEnd = Integer.parseInt(items[18]);
             int targetCloneStart = Integer.parseInt(items[19]);
             int targetCloneEnd = Integer.parseInt(items[20]);
+            // TODO: What should this be? maxLine = 2000000 -> this messes with cases where the method extends the clone
             targetMethodEnd = targetMethodEnd > maxLine ? targetCloneEnd : targetMethodEnd;
             ApplicabilityAnalyzer grafter = new ApplicabilityAnalyzer(sourceFilePath, sourceMethodStart, sourceMethodEnd, targetFilePath, targetMethodStart, targetMethodEnd);
             Matches stateMatches = grafter.state_level_match();
@@ -71,8 +72,9 @@ public class VariationExtractor implements Runnable {
                 teaCapWriter.writeFinalVariationToFile(lineText,results,finalResultsFile);
             }
 
-            System.out.printf("%s::%s\n",lineText,results);
+            //System.out.printf("%s::%s\n",lineText,results);
         } catch (Exception ex) {
+            System.out.printf("%s\n", lineText);
             ex.printStackTrace();
         }
     }

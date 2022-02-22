@@ -90,7 +90,9 @@ public class CloneVisitor extends ASTVisitor {
     public boolean visit(TypeDeclaration node){
         if(!node.getName().toString().equals(this.clone.getOwner())){
             // TODO: currently we do not handle inner classes
-            return false;
+            //return false;
+            //MUKE:this is a class with an inner class, so go ahead and look inside
+            return true;
         }
 
         Type superType = node.getSuperclassType();
@@ -208,6 +210,10 @@ public class CloneVisitor extends ASTVisitor {
 
             // the method containing the clone is the biggest block and should be pushed to the blockStack first
             blockStacks.push(new ImmutablePair<Integer, Integer>(start, end));
+
+            // TODO: potential ALTERATION: set inBlock for methods, too as we are only interested in analysing methods in their entirety? To this end, we would be able to recognize variables inside the function to fall out of scope
+            // TODO:                       at the end of the method. This is currently not recognized consistently, e.g. in a case where the return variable is defined inside a block (try-block with an included return)
+            // TODO:                       Then again: It should theoretically not matter anyways, as we only need to pay attention to the variables that are used in general + the return type.
 
             // set method start
             this.methodStart = start;

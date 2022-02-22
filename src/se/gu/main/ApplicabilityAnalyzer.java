@@ -78,29 +78,44 @@ public class ApplicabilityAnalyzer {
 //        this.sourceProjectPath = sourceProjectPath;
 //        this.targetProjectPath = targetProjectPath;
 
+        // TODO: What is the goal here? Is it to identify two potentially mapping methods for identifying their differences (the automated heuristic based on types, variables, methods?)
+        // TODO: What is supposed to be the output here? Or rather the input for the matching. Should it be the methods under test in source and target or the clones?
+        // TODO: Im not sure how this works with the last line or how the calculation itself works?
+        // TODO: This is probably more important than understanding how the AST parsing works?
+
         CompilationUnit cu1 = JParser.parseCode(sourceCode);
         CloneCalibrator calib1 = new CloneCalibrator(cu1, sourceStart, sourceEnd);
         cu1.accept(calib1);
+        // DEBUGGING: at this stage: .first is set to maxInt in fails-case
+        // DEBUGGING:                .first is set to a more correct seeming value in works-case -> first and respectively last line inside function (or rather node in AST?)
+        // Guess: Something to do with the fact, that fails-case does not have a method body, since it recognizes the clone inside an interface
+        // TODO: Check other fails-cases
 
         CompilationUnit cu2 = JParser.parseCode(targetCode);
         CloneCalibrator calib2 = new CloneCalibrator(cu2, targetStart, targetEnd);
         cu2.accept(calib2);
 
         //find methods in the given lines of code range
+        // initialised with the source method start and end (not clone)
         CloneMethodFinder sourceMethodFinder = new CloneMethodFinder(cu1, sourceStart, sourceEnd);
         cu1.accept(sourceMethodFinder);
         String sourceMethod = sourceMethodFinder.getMethodName();
         //added ability to get owner
         String sourceOwner = sourceMethodFinder.getOwnerName();
 
+        // initialised with the target method start and end (not clone)
         CloneMethodFinder targetMethodFinder = new CloneMethodFinder(cu2, targetStart, targetEnd);
         cu2.accept(targetMethodFinder);
         String targetMethod = targetMethodFinder.getMethodName();
         String targetOwner = targetMethodFinder.getOwnerName();
 
         // create two refined clones with only graftable code
+        // DEBUGGING: to calculate the startIndex the lines of the file are iterated until calib1.first is reached -> must not be larger than filesize
+        // first two cases in Fails fail due to this
         int x1 = FileUtiltities.getStartIndex(sourceCode, calib1.first);
+        //System.out.println("x1getStartIndexWoopWoop " + sourceMethod + " " + targetMethod);
         int y1 = FileUtiltities.getEndIndex(sourceCode, calib1.last);
+
         //sourceClone = new Clone(sourcePath,sourceMethod,x1,y1);
         sourceClone = new Clone(sourceOwner, sourcePath,sourceMethod,x1,y1);
 
@@ -110,10 +125,13 @@ public class ApplicabilityAnalyzer {
         int y2 = FileUtiltities.getEndIndex(targetCode, calib2.last);
         //targetClone = new Clone(targetPath,targetMethod,x2,y2);
         targetClone = new Clone(targetOwner, targetPath,targetMethod,x2,y2);
+
         //targetClone.setProjectPath(targetProjectPath);
 
+        // TODO: Understand: The comparison of the different methods under test should occur on the entire method, not only the clone
         init();
 
+        // TODO: With my proposed change to unify this step with all used variables or potentially group it into categories (parameters, attributes, variables) (or both to some extent?) just match the unified groups for both clones?
         pre_cm = match(pre1, pre2, sourcePath.equals(targetPath));
         post_cm = match(post1, post2, sourcePath.equals(targetPath));
 
